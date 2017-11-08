@@ -10,9 +10,10 @@
 	 -->
 	<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1">
 	<style>
-		@import url('./css/countdown.min.css');
+		<!-- @import url('./css/countdown.min.css'); -->
+		<!-- @import url('./src/css/countdown.css'); -->
 	</style>
-	<!-- <link rel="stylesheet" href="/css/countdown.css"> -->
+	<!--<link rel="stylesheet" href="./src/css/countdown.css">-->	
 </head>
 <body>
 	<div id="countdown">
@@ -33,15 +34,15 @@
 	      ">
 
 	<div id="actions">
-	   <a href="#start" id="play"><img src="play.svg" style="
+	   <a href="#start"><img src="play.svg" style="
 	      width: 40px;
 	      margin-right: 10px;
 	      "></a>
-	   <a href="#pause" id="pause"><img src="pause.svg" style="
+	   <a href="#pause"><img src="pause.svg" style="
 	      width: 40px;
 	      margin-right: 10px;
 	      "></a>
-	   <a href="#reset" id="reset"><img src="replay.svg" style="
+	   <a href="#reset"><img src="replay.svg" style="
 	      width: 30px;
 	      "></a>
 	   <select id="time" style="
@@ -56,8 +57,8 @@
 	      position: relative;
 	      top: -12px;
 	      display: block;
-	      margin: 40px auto;
-	      " onchange="changeTime()">
+	      margin: 40px auto;"
+		  onchange="changeTime()">
 	      <option value="01:00">01:00</option>
 	      <option value="05:00">05:00</option>
 	      <option value="10:00">10:00</option>
@@ -69,6 +70,32 @@
 
 	<div class="applauses">
 		<span>APLAUSOS</span>
+	</div>
+	
+	<div class="presentation-time-slots">
+		<ol id="time-slots-list">
+			<li class="time-slot" title="10:00">10:00am - 10 min</li>
+			<li class="time-slot" title="10:00">10:10am - 10 min</li>
+			<li class="time-slot" title="20:00">10:20am - 20 min</li>
+			<li class="time-slot" title="30:00">10:40am - 30 min</li>
+			<li class="time-slot" title="10:00">11:10am - 10 min</li>
+			<li class="time-slot" title="10:00">11:20am - 10 min</li>
+			<li class="time-slot" title="20:00">11:30am - 20 min</li>
+			<li class="time-slot" title="30:00">11:50am - 30 min</li>
+			<li class="time-slot" title="10:00">12:20pm - 10 min</li>
+			<li class="time-slot" title="10:00">12:30pm - 10 min</li>
+			<li class="time-slot" title="10:00">12:40pm - 10 min</li>
+			<li class="time-slot" title="20:00">03:00pm - 20 min</li>
+			<li class="time-slot" title="20:00">03:20pm - 20 min</li>
+			<li class="time-slot" title="20:00">03:40pm - 20 min</li>
+			<li class="time-slot" title="20:00">04:00pm - 20 min</li>
+			<li class="time-slot" title="10:00">04:20pm - 10 min</li>
+			<li class="time-slot" title="30:00">04:30pm - 30 min</li>
+			<li class="time-slot" title="10:00">05:40pm - 10 min</li>
+			<li class="time-slot" title="30:00">05:50pm - 30 min</li>
+			<li class="time-slot" title="10:00">06:20pm - 10 min</li>
+			<li class="time-slot" title="30:00">06:30pm - 30 min</li>
+		</ol>
 	</div>
 	
 	<script>
@@ -139,6 +166,7 @@
 				if (t.total <= 0) {
 					clearInterval(countdown.timeinterval);
 					document.body.className = "finish";
+					setTimeout(goToNextTimeSlot, 30000 /* 30 segundos */);					
 				}
 				countdown.timeInitial = countdown.timeInitial - 1000;
 			},
@@ -208,7 +236,46 @@
 			document.location.hash = '#' + time;
 		};
 		
-		// window.open('./countdown-control.html', 'Countdown Control', 'menubar=1, resizable=1, width=150, height=150');
+		function getEventTarget(e) {
+			e = e || window.event;
+			return e.target || e.srcElement; 
+		}
+
+		var timeSlotsList = document.getElementById('time-slots-list');
+		
+		timeSlotsList.onclick = function(event) {
+			var target = getEventTarget(event);
+			//alert(target.innerHTML);
+			if (target.tagName != "LI") {
+				// avoid multi-line selection
+				return;
+			}
+			for (var i = 0; i < timeSlotsList.children.length; i++) {				
+				timeSlotsList.children[i].style.backgroundColor = "";
+				timeSlotsList.children[i].classList.remove("selected");
+			}
+			selectNewTimeSlot(target);
+		};
+		
+		var selectNewTimeSlot = function(targetSlot) {
+			targetSlot.style.backgroundColor = "white";
+			targetSlot.classList.add("selected");
+			document.location.hash = '#' + targetSlot.title;
+			document.body.className = "";
+		};
+		
+		var goToNextTimeSlot = function() {
+			for (var i = 0; i < timeSlotsList.children.length; i++) {								
+				if (timeSlotsList.children[i].classList.contains("selected")) {
+					timeSlotsList.children[i].classList.remove("selected");
+					timeSlotsList.children[i].style.backgroundColor = "";
+					var nextListIndex = i != timeSlotsList.children.length - 1 ? i + 1 : 0;
+					selectNewTimeSlot(timeSlotsList.children[nextListIndex]);
+					return;
+				}
+			}
+		};
+
 	</script>
 </body>
 </html>

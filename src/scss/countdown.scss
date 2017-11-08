@@ -4,7 +4,7 @@
     font-weight: 400;
     src: local('Share Tech Mono'),
          local('ShareTechMono-Regular'), 
-         url(./../fonts/RQxK-3RA0Lnf3gnnnNrAsYdJ2JT0J65PSe7wdxAnx_I.woff2) format('woff2');
+         url(./../../fonts/RQxK-3RA0Lnf3gnnnNrAsYdJ2JT0J65PSe7wdxAnx_I.woff2) format('woff2');
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
 }
 body{
@@ -79,6 +79,18 @@ body.finish .applauses {
 	color: #B90000;
 }
 
+ol {
+	list-style: none;
+}
+
+.time-slot {
+	font-size: 3em;
+}
+
+li.time-slot:hover {
+	background: rgba(255, 255, 255, 0.6);
+}
+
 @keyframes alert {
     0% {
         background: #DC4949;
@@ -96,11 +108,9 @@ body.finish .applauses {
     }
 }
 
-@media only screen and (max-width: 640px) {
-	body { font-size: 10px; }
-}
 
-@media only screen and (max-width: 320px) {
+@media only screen and (max-width: 640px) {
+    body { font-size: 10px; }
     #countdown {
         font-size: 14em;
         letter-spacing: -20px;
@@ -114,6 +124,12 @@ body.finish .applauses {
 }
 @media only screen and (min-width: 768px) and (max-width: 1024px) {
     #countdown {
-        font-size: 20em;
+        font-size: 18em;
+    }   
+}
+
+@media only screen and (min-width: 1025px) and (max-width: 1920px) {
+    #countdown {
+        font-size: 24em;
     }   
 }
